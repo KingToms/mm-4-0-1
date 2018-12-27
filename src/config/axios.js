@@ -14,7 +14,7 @@ if (hostname.indexOf('tmp-mm.qiaocat.com') > -1 && protocol == 'http:'){
   baseUrl = keyConf.baseUrl.master
 } else if (hostname.indexOf('mm.qiaocat.com') > -1 && protocol == 'https:'){
   baseUrl = keyConf.baseUrl.masters
-}else{
+} else{
   baseUrl = keyConf.baseUrl.test
 }
 // let baseUrl = hostname.indexOf('mm.qiaocat.com') > -1 ? keyConf.baseUrl.master : keyConf.baseUrl.test
@@ -51,7 +51,7 @@ export default async (url = '', params = {}, type = 'GET') => {
 
   // url = url + '?API_VERSION=V4.0.0';
   if(url.indexOf('API_VERSION') < 0)
-    url = url + '?API_VERSION=V4.1.0';
+    url = url + '?API_VERSION=V4.0.1';
 
   return new Promise((resolve, reject) => {
     /*axios({

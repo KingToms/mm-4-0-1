@@ -143,7 +143,7 @@ export default {
     },
     async getOrderList (data){
       // && data.status
-      
+      let _this=this
       this.isScroll = false
       // this.flag = false
       this.pageNo = data ? data.page : ++this.pageNo;
@@ -154,6 +154,7 @@ export default {
         let tempArr = res.data.result
         if(this.status === '1000,1200') tempArr = this.judgeOrdersType(tempArr)
         this.orders = this.orders.concat(tempArr)
+        // _this.$set(_this.data,'orders','_this.orders.concat(tempArr)')
         // debugger
         this.SET_ORDERLIST(this.orders)
         // this.flag = true
@@ -168,7 +169,6 @@ export default {
       let res = await Reccommend({})
       if(res.status === 'ok')
         this.commend = res.data
-      // console.log(res);
     },
     scroll(){
       let _this = this
@@ -239,7 +239,6 @@ export default {
       }
     },
     getOrderListAndShowFirst(data){
-      console.log('getOrderListAndShowFirst===>data',data);
       this.getOrderList(data);
     },
     closeFirstOrder(){

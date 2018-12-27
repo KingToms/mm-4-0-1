@@ -66,7 +66,13 @@ export default {
     // city_id 市
     // district_id 区
     // street_address 详细街道
+    //storeName  门店名字
+    //shop_id    门店id
+    //store_address  门店地址
+    state.confirmOrder.store_address = order.store_address && order.store_address.length >0 ? order.store_address : state.confirmOrder.store_address;
+    state.confirmOrder.store_id = order.store_id && order.store_id.length >0 ? order.store_id : state.confirmOrder.store_id;
     state.confirmOrder.appoint = order.appoint && order.appoint.length >0 ? order.appoint : state.confirmOrder.appoint;
+    state.confirmOrder.store_name = order.store_name && order.store_name.length >0 ? order.store_name : state.confirmOrder.store_name;
     state.confirmOrder.mobile = order.mobile && order.mobile.length >0 ? order.mobile : state.confirmOrder.mobile;
     state.confirmOrder.date = order.date && order.date.length >0 ? order.date : state.confirmOrder.date;
     state.confirmOrder.time = order.time && order.time.length >0 ? order.time : state.confirmOrder.time;

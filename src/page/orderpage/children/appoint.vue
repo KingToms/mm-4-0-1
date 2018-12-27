@@ -24,6 +24,7 @@ export default {
   created(){
     this.appoint = this.confirmOrder ? this.confirmOrder.appoint : ''
     this.mobile = this.confirmOrder ? this.confirmOrder.mobile : ''
+    let id=this.$route.params.id
   },
   computed:{
     ...mapState(['confirmOrder'])

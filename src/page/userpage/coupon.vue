@@ -8,13 +8,16 @@
         <a class="back" href="javascript:void(0);" @click="$router.go(-1)" ></a>
         <ul class="clear">
           <li class="left" @click="selUnused">
-            <p :class="{'choose': choose === 1}">未使用({{coupons.unused.length}})</p>
+            <!-- <p :class="{'choose': choose === 1}">未使用({{coupons.unused.length}})</p> -->
+            <p :class="{'choose': choose === 1}">未使用({{unusednum}})</p>
           </li>
           <li class="left" @click="selUsed">
-            <p :class="{'choose': choose === 2}">使用记录({{coupons.used.length}})</p>
+            <!-- <p :class="{'choose': choose === 2}">使用记录({{coupons.used.length}})</p> -->
+            <p :class="{'choose': choose === 2}">使用记录({{usednum}})</p>
           </li>
           <li class="left" @click="selOver">
-            <p :class="{'choose': choose === 3}">已过期({{coupons.over.length}})</p>
+            <!-- <p :class="{'choose': choose === 3}">已过期({{coupons.over.length}})</p> -->
+            <p :class="{'choose': choose === 3}">已过期({{overnum}})</p>
           </li>
         </ul>
       </div>
@@ -72,7 +75,10 @@ export default {
       show: false, // 判断是否有优惠券
       renderCoupons: [],
       page: 0,
-      page_size: 100
+      page_size: 100,
+      unusednum:null,
+      usednum:null,
+      overnum:null,
     }
   },
   created(){
@@ -88,6 +94,9 @@ export default {
       }
       else
         alert('网络异常，请重试')
+        this.unusednum=this.coupons.unused.length;
+        this.usednum=this.coupons.used.length;
+        this.overnum=this.coupons.over.length;
     },
     selUnused(){
       this.choose=1

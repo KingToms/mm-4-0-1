@@ -14,11 +14,13 @@
       </a>
     </div>
     <a class="appointment" href="javascript:void(0);" @click="appiont">
+    <!-- <a class="appointment" href="/order"> -->
       立即预约
     </a>
   </div>
 </template>
 <script>
+
 import Vue from 'vue';
 import keyConf from '../../../common/keyConf'
 import {followProduct,productFollow,productUnfollow,userIsLogin} from '@/service/getData';
@@ -134,7 +136,8 @@ export default {
     }
   }
 }
-</script>
+ </script>
+
 <style lang="scss" scoped>
 @import '../../../assets/css/mixin.scss';
 .pro_footer{

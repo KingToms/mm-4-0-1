@@ -261,7 +261,6 @@
       $(window).resize(function() {
         _this.squareImg();
       });
-
     },
     methods: {
       quanshow (){
@@ -332,6 +331,7 @@
         let res = await store_detail({storeId:this.shoppingId});
         if(res.status == "ok"){
           this.shopDetail=res.data;
+          console.log(res.data)
           this.shoptype=res.data.store_type;
           if(!res.data.user_img){
             this.shoppingImg=false;

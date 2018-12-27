@@ -40,11 +40,13 @@
     </div>
     </div>
     <!-- 广告图 -->
-    <div class="adver" v-if="resData.Advert && resData.Advert.length > 0">
-      <a @click="linkType(resData.Advert[0])">
-        <img :src="resData.Advert[0].image" alt="">
-      </a>
-    </div>
+        <div class="adver" v-if="resData.Advert && resData.Advert.length > 0">
+            <a @click="linkType(resData.Advert[0])">
+            <!-- <a href="#/appointsev/index"> -->
+            <!-- <a href="/topic-watsons/coupon"> -->
+                <img :src="resData.Advert[0].image" alt="">  
+            </a>
+        </div>
 
     <!-- 热卖排行 -->
     <div class="hot">
@@ -64,7 +66,8 @@
       </div>
       <div class="scroll">
         <div class="item-scroll">
-          <span :style="{width:`${wStyle}px`}" v-for="(item,index) in resData.Hotlist" :key="index" @click="$router.push(`/detail/${item.product.id}`)">
+          <span :style="{width:`${wStyle}px`}" v-for="(item,index) in resData.Hotlist" :key="index" @click="todetail(index)">
+          <!-- <span :style="{width:`${wStyle}px`}" v-for="(item,index) in resData.Hotlist" :key="index" @click="$router.push(`/choosedetail/${item.product.id}`)"> -->
             <div class="item" :style="{width:`${wStyle}px`}">
               <div class="img" :style="{backgroundImage:`url(${item.image})`}">
                 <!-- <img :src="item.image" alt=""> -->
@@ -86,12 +89,14 @@
     </div>
     <!-- 人气美业师 -->
     <div class="mys">
+        <!-- <img class="qcslogo" src="../../../../static/icon/appointment/shoplogo_03.png" alt=""> -->
       <div class="mys-title">
         人气美业师
         <router-link to="/stylist/fans" class="more-img"></router-link>
       </div>
       <div class="mys-item">
-        <div class="mys-left" v-for="(item,index) in resData.Hot_sty" :key="index" v-if="index <2" @click="$router.push(`/detail/shopping/${item.stylist.id}`)">
+        <div class="mys-left" v-for="(item,index) in resData.Hot_sty" :key="index" v-if="index <2" @click="routerto(item.link)">
+        <!-- <div class="mys-left" v-for="(item,index) in resData.Hot_sty" :key="index" v-if="index <2" @click="$router.push(`/detail/shopping/${item.stylist.id}`)"> -->
           <div class="item-img">
             <img :src="item.image" alt="">
             <span class="mys-level">{{item.stylist && item.stylist.level_name}}</span>
@@ -155,6 +160,34 @@ export default {
     // this.getRecommendList();
   },
   methods: {
+      //判断服务方式
+        routerto(link){
+            let _this=this
+            if(link=="watsons"){
+                _this.$router.push({
+                    path:'/stylist/fans',
+                    query:{
+                        link:link,
+                    }
+                })
+            }else{
+                _this.$router.push(`/detail/shopping/${this.resData.Hot_sty[0].stylist.id}`)
+            }
+        },
+      todetail(index){
+          let _this=this
+          if(_this.resData.Hotlist[index].product.id==1000167 || _this.resData.Hotlist[index].product.id==1000370 || _this.resData.Hotlist[index].product.id==1000069 || _this.resData.Hotlist[index].product.id==1001104){
+            //   _this.$router.push(`/choosedetail/${_this.resData.Hotlist[index].product.id}`)
+              _this.$router.push({
+                path:`/choosedetail/${_this.resData.Hotlist[index].product.id}`,
+                query:{
+                    id:_this.resData.Hotlist[index].product.id
+                }
+            })
+          }else{
+              _this.$router.push(`/detail/${_this.resData.Hotlist[index].product.id}`)
+          }
+      },
     async getData(){
       let res = await getHomeRecommend();
       this.resData.Shuffling = res.Shuffling.data;
@@ -166,7 +199,6 @@ export default {
       this.resData.type_64 = res.type_64.data;
       this.resData.type_128 = res.type_128.data;
       this.resData.type_conf = res.type_conf.data;
-
       // 显示广告窗口
       if(this.resData.home_tc.length > 0){
         this.showAdvertBox();
@@ -188,12 +220,10 @@ export default {
     // 定时弹出广告窗口
     showAdvertBox() {
       let advert_time_old = getStore("advert_time");
-      // console.log("advert_time_old:",advert_time_old);
 
       let advertDate = new Date();
       let advert_time = advertDate.toLocaleDateString(); // 首页当前打开的日期
       setStore("advert_time",advertDate.toLocaleDateString());
-      // console.log("advert_time:",advert_time);
       if(advert_time == advert_time_old){
         return
       }else { // 不是当天则显示广告
@@ -408,7 +438,14 @@ export default {
     background-color: #fff;
     margin-top: 1rem;
     padding: 2rem 0 0 1.5rem;
+    position: relative;
+    .qcslogo{
+        position: absolute;
+        width: 2.5rem;
+        top: 1.8rem;
+    }
     .mys-title{
+        // width: 90%;
       position: relative;
       height: 1.5rem;
       padding-left: 5rem;
@@ -417,6 +454,7 @@ export default {
       background-repeat: no-repeat;
       font-size: 1.4rem;
       line-height: 1.4rem;
+    //   left: 10%;
     }
     .mys-item{
       padding: 3.5rem 0 2rem 0;

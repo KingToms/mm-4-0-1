@@ -106,6 +106,12 @@ const SearchStart = resolve => require.ensure([], () => resolve(require('@/page/
 
 // 订单
 const Order = resolve => require.ensure([], () => resolve(require('@/page/orderpage/order')), 'pay')
+
+const qcsGoShopOrder = resolve => require.ensure([], () => resolve(require('@/page/orderpage/qcsgoshoporder')), 'pay')
+//门店服务下的订单
+const chooseOrder = resolve => require.ensure([], () => resolve(require('@/page/orderpage/chooseorder')), 'pay')
+//首页进入详情下订单
+const shopServiceOrder = resolve => require.ensure([], () => resolve(require('@/page/orderpage/shopserviceorder')), 'pay')
 const Payment = resolve => require.ensure([], () => resolve(require('@/page/paypage/pay')), 'pay')
 const PayResult = resolve => require.ensure([], () => resolve(require('@/page/paypage/payResult')), 'pay')
 const PaySuccess = resolve => require.ensure([], () => resolve(require('@/page/paypage/children/success')), 'pay')
@@ -122,10 +128,20 @@ const CouponCenter = resolve => require.ensure([], () => resolve(require('@/page
 
 // 产品详情
 const Detail = resolve => require.ensure([], () => resolve(require('@/page/detailpage/detail')), 'detailPage')
+//屈臣氏产品详情
+const QcsDetail = resolve => require.ensure([], () => resolve(require('@/page/detailpage/qcsdetail')), 'detailPage')
+//门店下服务详情
+const shopServiceDetail = resolve => require.ensure([], () => resolve(require('@/page/detailpage/shopservicedetail')), 'detailPage')
+//首页进入详情两个选项
+const chooseDetail = resolve => require.ensure([], () => resolve(require('@/page/detailpage/choosedetail')), 'detailPage')
+//专题跳转详情
+const qcsGoShopDetail = resolve => require.ensure([], () => resolve(require('@/page/detailpage/qcsgoshopdetail')), 'detailPage')
 // 产品详情---图文详情(注：IOS的webview专用)
 const Imgtext = resolve => require.ensure([], () => resolve(require('@/page/detailpage/imgtext')), 'imgtext')
 // 产品详情---店铺页面
 const Shopping = resolve => require.ensure([], () => resolve(require('@/page/detailpage/shopping')), 'shopping')
+//qcs门店详情
+const qcsShopping = resolve => require.ensure([], () => resolve(require('@/page/detailpage/qcsshopping')), 'shopping')
 // 订单赔付规则
 const OrderDesc = resolve => require.ensure([], () => resolve(require('../page/detailpage/children/orderDesv')), 'orderdescd')
 
@@ -193,6 +209,9 @@ const receiptInfo = r => require.ensure([], () => r(require('@/page/topic/beauty
 const makeupBride = r => require.ensure([], () => r(require('@/page/topic/makeupbride/index')), 'makeupBride');
 // 新春专题-2018春节
 const newyear2018 = r => require.ensure([], () => r(require('@/page/topic/new_year2018/index')), 'newyear2018');
+//屈臣氏专题---2018
+const watsonsShop = r => require.ensure([],() => r(require('@/page/topic/watsonsShop/index')), 'watsonsShop');
+const watsonsShopCoupon = r => require.ensure([],() => r(require('@/page/topic/watsonsShop/exchangeCoupon')), 'watsonsShopCoupon');
 // 新春公告-2018春节
 const announcement2018 = r => require.ensure([], () => r(require('@/page/topic/announcement/index')), 'announcement2018');
 // 寻找最美美业师(报名)
@@ -202,6 +221,13 @@ const bestMys = r => require.ensure([], () => r(require('@/page/topic/bestMys/si
 const bestMysVote = r => require.ensure([], () => r(require('@/page/topic/bestMys/vote')), 'bestMys');
 // 寻找最美美业师(完善资料)
 const perfectInfo = r => require.ensure([], () => r(require('@/page/topic/bestMys/perfectInfo')), 'bestMys');
+// 毕业妆
+const graduation = r => require.ensure([], () => r(require('@/page/topic/20180502/index')), 'graduation');
+//到店约妆服务
+const appointSev = resolve => require.ensure([], () => resolve(require('@/page/appointsevpage/index')), 'appointsev')
+//兑换抵扣券
+const exchangeCoupon = resolve => require.ensure([], () => resolve(require('@/page/appointsevpage/exchangeCoupon')), 'appointsev')
+
 
 
 /*专题模块结束 */
@@ -227,6 +253,16 @@ const router = new Router({
               redirect: '/home'
             },
             {
+                path:'/appointSev/index',
+                name:'appointSev',
+                component:appointSev,
+            },
+            {
+                path:'/appointSev/exchangeCoupon',
+                name:'exchangeCoupon',
+                component:exchangeCoupon,
+            },
+            {
               // 首页
               path: '/home',
               component: Home,
@@ -239,6 +275,7 @@ const router = new Router({
                   name: 'recommend',
                   component: Recommend
                 },
+                
                 // {
                 //   path: '/home/makeup',
                 //   name: 'makeup',
@@ -398,11 +435,39 @@ const router = new Router({
           name: 'shopping',
           component: Shopping
         },
+        {
+            path: '/detail/qcsshopping/:shopid',
+            name: 'qcsshopping',
+            component: qcsShopping
+          },
         // 详情页面
         {
           path: '/detail/:id',
           name: 'detail',
           component: Detail
+        },
+        //门店服务下详情
+        {
+            path: '/shopservicedetail/:id',
+            name: 'shopservicedetail',
+            component: shopServiceDetail
+        },
+        //首页进入详情两个选项
+        {
+            path: '/choosedetail/:id',
+            name: 'choosedetail',
+            component: chooseDetail
+        },
+        {
+            path: '/qcsdetail/:id',
+            name: 'qcsdetail',
+            component: QcsDetail
+        },
+        //专题跳转
+        {
+            path: '/qcsgoshopdetail/:id',
+            name: 'qcsgoshopdetail',
+            component: qcsGoShopDetail
         },
         // 详情页面--图文详情 (注：IOS的webview专用)
         {
@@ -419,6 +484,23 @@ const router = new Router({
           path: '/order/:id?',
           name: 'order',
           component: Order
+        },
+        {
+            path: '/qcsgoshoporder/:id?',
+            name: 'qcsgoshoporder',
+            component: qcsGoShopOrder
+        },
+        //首页进入详情下单
+        {
+            path: '/chooseorder/:id?',
+            name: 'chooseorder',
+            component: chooseOrder
+        },
+        //门店服务下的订单
+        {
+            path: '/shopserviceorder/:id?',
+            name: 'shopserviceorder',
+            component: shopServiceOrder
         },
         // 支付
         {
@@ -609,6 +691,17 @@ const router = new Router({
           },
           component: sendGift
         },
+        //专题六--屈臣氏到店服务
+        {
+            path:'/topic-watsons/index',
+            // name:'watsonsShop',
+            component:watsonsShop
+        },
+        {
+            path:'/topic-watsons/coupon',
+            // name:'watsonsShopCoupon',
+            component:watsonsShopCoupon
+        },
         {
           path: '/topic-ysl',
           component: ysl,
@@ -749,6 +842,14 @@ const router = new Router({
           },
           component: announcement2018
         },
+        // 毕业妆
+        {
+          path: '/topic-graduation',
+          meta: {
+            title: '毕业妆'
+          },
+          component: graduation
+        },
 
         // 三周年--美丽小城
         {
@@ -827,73 +928,73 @@ const router = new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.title) window.document.title = to.meta.title;
+    router.beforeEach((to, from, next) => {
+    if (to.meta.title) window.document.title = to.meta.title;
   /* if(to.fullPath.indexOf('usercenter') > -1){
     debugger
   } */
   // 访问'我的俏猫', 如果已经登录，自动跳转为 '/usercenter'
-  if (to.fullPath.indexOf('login') > -1 && $.cookie(keyConf.qm_cookie)) {
-    next({
-      path: '/usercenter'
-    })
-    return
-  }
+    if (to.fullPath.indexOf('login') > -1 && $.cookie(keyConf.qm_cookie)) {
+        next({
+        path: '/usercenter'
+        })
+        return
+    }
 
-  if (to.fullPath.indexOf('usercenter') > -1 && !$.cookie(keyConf.qm_cookie)) {
-    next('/login')
-    return
-  }
+    if (to.fullPath.indexOf('usercenter') > -1 && !$.cookie(keyConf.qm_cookie)) {
+        next('/login')
+        return
+    }
 
-  if (to.fullPath.indexOf('follow') > -1 && !$.cookie(keyConf.qm_cookie)) {
-    next('/login')
-    return
-  }
+    if (to.fullPath.indexOf('follow') > -1 && !$.cookie(keyConf.qm_cookie)) {
+        next('/login')
+        return
+    }
 
-  if (to.fullPath.indexOf('wallet') > -1 && !$.cookie(keyConf.qm_cookie)) {
-    next('/login')
-    return
-  }
+    if (to.fullPath.indexOf('wallet') > -1 && !$.cookie(keyConf.qm_cookie)) {
+        next('/login')
+        return
+    }
 
-  if (to.fullPath.indexOf('cat_food') > -1 && !$.cookie(keyConf.qm_cookie)) {
-    next('/login')
-    return
-  }
+    if (to.fullPath.indexOf('cat_food') > -1 && !$.cookie(keyConf.qm_cookie)) {
+        next('/login')
+        return
+    }
 
-  if (to.fullPath.indexOf('login') > -1 && !$.cookie(keyConf.qm_cookie)) {
-    next()
-    return
-  }
+    if (to.fullPath.indexOf('login') > -1 && !$.cookie(keyConf.qm_cookie)) {
+        next()
+        return
+    }
 
-  if ((to.fullPath.indexOf('order') > -1 || to.fullPath.indexOf('topic-order') > -1) && !$.cookie(keyConf.qm_cookie)) {
-    next({
-      path: '/login',
-      query: {
-        url: to.fullPath
-      }
-    })
-    return
-  }
+    if ((to.fullPath.indexOf('order') > -1 || to.fullPath.indexOf('topic-order') > -1) && !$.cookie(keyConf.qm_cookie)) {
+        next({
+        path: '/login',
+        query: {
+            url: to.fullPath
+        }
+        })
+        return
+    }
 
-  if (to.fullPath.indexOf('/topic-dressparty/lineup') > -1 && !$.cookie(keyConf.qm_cookie)) {
-    next({
-      path: '/topic-dressparty',
-      query: {
-        type: 1
-      }
-    })
-    return
-  }
+    if (to.fullPath.indexOf('/topic-dressparty/lineup') > -1 && !$.cookie(keyConf.qm_cookie)) {
+        next({
+        path: '/topic-dressparty',
+        query: {
+            type: 1
+        }
+        })
+        return
+    }
 
-  if (to.fullPath.indexOf('/topic-makeup001/lineup001') > -1 && !$.cookie(keyConf.qm_cookie)) {
-    next({
-      path: '/topic-makeup001',
-      query: {
-        type: 0.01
-      }
-    })
-    return
-  }
+    if (to.fullPath.indexOf('/topic-makeup001/lineup001') > -1 && !$.cookie(keyConf.qm_cookie)) {
+        next({
+        path: '/topic-makeup001',
+        query: {
+            type: 0.01
+        }
+        })
+        return
+    }
 
   next()
 })

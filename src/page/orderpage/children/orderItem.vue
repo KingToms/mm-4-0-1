@@ -1,11 +1,12 @@
 <template>
   <div class="order-item">
-    
-      <div class="item" v-for="(item,index) in orderList" :key="index" @click="$router.push({name: 'orderDetail', params: {ordersn: item.sn}})">
+      <!-- <div @click="toorderdetail">1111</div> -->
+      <div class="item" v-for="(item,index) in orderList" :key="index" @click="$router.push({name: 'orderDetail', params: {ordersn: item.sn,orderid:item.id}})">
         <div class="shop-info">
           <div class="info">
             <img :src=" funInstanceof(item.seller) ? item.seller.user_img:require('../../../assets/image/icon/detail/details_photo_store60px.png')" alt="美业师" title="美业师">
-            <span>{{ funInstanceof(item.seller) ? item.seller.real_name:''}}</span>
+            <span>{{ funInstanceof(item.seller) ? item.seller.store_name:'俏猫'}}</span>
+            <!-- <span>1111</span> -->
             <a href="###" class="icon"></a>
           </div>
           <!-- <span class="order-status">{{ (item.order_status === 1000 || item.order_status === 1200) && item.comments_num === 2 ? '服务结束' : orderStatus[item.order_status == 1000 ? item.order_status + '_'+ item.comments_num : item.order_status].USER_S}}</span> -->
@@ -32,7 +33,8 @@
               <a v-if="item.order_status===0" href="javascript:void(0);" @click.stop="payment(item)" class="right pay">去支付</a>
               <a v-if="item.order_status===201 || item.order_status===202 || item.order_status===300 || item.order_status===0 || item.order_status===302 || item.order_status===1" class="right cancel" href="javascript:void(0)" @click.stop="cancelOrder(item.sn,item.order_status)">取消订单</a>
               <a v-if="(item.order_status===1000 || item.order_status===1200) && item.comments_num === 0" class="right evaluate" href="javascript:void(0)" @click.stop="$router.push({name:'evaluate',params:{sn: item.sn}})">去评价</a>
-              <a v-if="item.order_status===11000 || item.order_status===1000 || item.order_status===1200 || item.order_status===11000 || item.order_status===10000" class="right closed" href="javascript:void(0)" @click.stop="$router.push({name:'order',params:{id:(item.products[0]).id}})">再次购买</a>
+              <!-- <a v-if="item.order_status===11000 || item.order_status===1000 || item.order_status===1200 || item.order_status===11000 || item.order_status===10000" class="right closed" href="javascript:void(0)" @click.stop="$router.push({name:'order',params:{id:(item.products[0]).id}})">再次购买</a> -->
+              <a v-if="item.order_status===11000 || item.order_status===1000 || item.order_status===1200 || item.order_status===11000 || item.order_status===10000" class="right closed" href="javascript:void(0)" @click.stop="biginGuy(item.products[0].id)">再次购买</a>
               <a v-if="item.order_status===301" class="right Conduct" href="javascript:void(0)" @click.stop="orderCompleted(item.sn,item.order_status)">服务完成</a>
               <a v-if="item.order_status===300" class="right startService" href="javascript:void(0)" @click.stop="orderStart(item.sn,item.order_status,item.contact.send_time)">开始服务</a>
               <a v-if="item.order_status===11000" class="right cancel" href="javascript:void(0)" @click.stop="orderDelete(item.sn,item.order_status)">删除订单</a>
@@ -47,14 +49,16 @@
 <script>
 import {mapState,mapMutations} from 'vuex';
 import common from '../../../common/common';
-import {startService, endService, cancelOrder, getConfigData} from '../../../service/getData';
+import {startService, endService, cancelOrder, getConfigData, getOrder} from '../../../service/getData';
 import {storage_custom} from '../../../common/store';
 import keyConf from '../../../common/keyConf';
+import { get } from 'http';
 export default {
   name: 'orderItem',
   data () {
     return {
       orders:[],
+      baseUrl:'',
       orderStatus:{
         0:'待付款',
         1: '待服务',
@@ -74,18 +78,44 @@ export default {
   },
   created(){
     // 从api调用接口展示订单状态
-    /* if(storage_custom.isExpire(keyConf.orderStatus)){
-      this.getConfigData();
-    }else{
-      this.orderStatus = storage_custom.get(keyConf.orderStatus);
-    } */
-     
+    //  if(storage_custom.isExpire(keyConf.orderStatus)){
+    //   this.getConfigData();
+    // }else{
+    //   this.orderStatus = storage_custom.get(keyConf.orderStatus);
+    // } 
+    this.baseUrl=this.$route.query.baseUrl;
   },
   computed:{
     ...mapState(['orderList','bgShow','ordermanage'])
   },
   methods: {
     ...mapMutations(['SET_ORDERMANAGE','SET_BGSHOWHIDE']),
+    biginGuy(pro_id){
+        let _this=this
+        if(pro_id===1000167 || pro_id===1000370 ){
+            _this.$router.push({
+                name:'chooseorder',
+                params:{
+                    id:pro_id
+                }
+            })
+        }else if(pro_id===1000069 || pro_id===1001099||pro_id===1000663||pro_id===1001104){
+            _this.$router.push({
+                name:'qcsgoshoporder',
+                params:{
+                    id:pro_id
+                }
+            })
+        }else{
+            
+            _this.$router.push({
+                name:"order",
+                params:{
+                    id:pro_id
+                }
+            })
+        }
+    },
     funInstanceof(obj){
       return Object.prototype.toString.call(obj) === "[object Object]"
     },
@@ -137,9 +167,17 @@ export default {
         orderStatus:obj.orderStatus,
         ordersn:obj.ordersn
       }
-      // console.log(ordermanage.content,ordermanage.orderStatus)
       this.SET_ORDERMANAGE(ordermanage)
       this.SET_BGSHOWHIDE(true)
+    },
+     async toorderdetail(){
+        let _this=this
+        let obj={
+            order_id:512973,
+            order_sn:"201811191009259505"
+        }
+        let res=await getOrder(obj)
+
     },
     async payment(item){
       let createTime = common.getDate(item.created_at)

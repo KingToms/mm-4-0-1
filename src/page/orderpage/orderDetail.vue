@@ -44,7 +44,8 @@
     <div class="order-content">
       <div class="info" v-if="order.stylist && order.stylist.length > 0 && order.order_product.length > 0">
         <img :src="(order.stylist && order.stylist.length > 0 && order.stylist[0].user_img ? order.stylist[0].user_img:require('../../assets/image/icon/detail/details_photo_store60px.png'))" alt="">
-        <span>{{(order.stylist && order.stylist.length > 0 ? order.stylist[0]:{}).nick}}</span>
+        <!-- <span>{{(order.stylist && order.stylist.length > 0 ? order.stylist[0]:{}).nick}}</span> -->
+        <span>{{(order.stylist && order.stylist.length > 0 ? order.stylist[0]:{}).store_name}}</span>
         <a class="icon" :href="(order.order_product[0]).seller_id"></a>
       </div>
       <div class="product" v-for="(item,index) in order.order_product" :key="index">
@@ -78,13 +79,13 @@
       </div>
        <div class="contact">
         <ul class="clear">
-          <li class="left">
+          <!--<li class="left">
             <a :href="`tel:${(order.stylist && order.stylist.length > 0 && order.stylist[0].mobile.length > 0? order.stylist[0].mobile :'4008335138')}`">
               <span>商家客服</span>
               <icon></icon>
             </a>
-          </li>
-          <li class="left"><div class="center"></div></li>
+          </li> -->
+          <!-- <li class="left"><div class="center"></div></li> -->
           <li class="left">
             <a href="tel:4008335138">
               <span>俏猫客服</span>
@@ -122,11 +123,13 @@
     </div>
     <!-- 订单信息 -->
     <div class="btn">
+        <a class="back-btn" @click="$router.push('/home/recommend')">返回首页</a>
       <a v-if="order.order_status===0 && timeServer >= 0" href="javascript:void(0);" @click.stop="payment" class="right pay bgYellow">去支付</a>
       <a v-if="order.order_status===300" class="right startService bgYellow" href="javascript:void(0)" @click.stop="orderStart">开始服务</a>
       <a v-if="order.order_status===201 || order.order_status===202 || order.order_status===300 || order.order_status===302 || order.order_status===1 || (order.order_status === 0 && timeServer > 0)" class="right cancel normal" href="javascript:void(0)" @click.stop="cancelOrder">取消订单</a>
       <a v-if="(order.order_status===1000 || order.order_status===1200) && order.comments_num === 0" class="right evaluate bgYellow" href="javascript:void(0)" @click.stop="$router.push({name:'evaluate',params:{sn: order.sn}})">去评价</a>
-      <a v-if="order.order_status===11000 || order.order_status===1000 || order.order_status===1200 || order.order_status===11000 || order.order_status===10000" class="right closed normal" href="javascript:void(0)" @click.stop="$router.push({name:'order',params:{id:(order.order_product[0]).id}})">再次购买</a>
+      <!-- <a v-if="order.order_status===11000 || order.order_status===1000 || order.order_status===1200 || order.order_status===11000 || order.order_status===10000" class="right closed normal" href="javascript:void(0)" @click.stop="$router.push({name:'order',params:{id:(order.order_product[0]).id}})">再次购买</a> -->
+      <a v-if="order.order_status===11000 || order.order_status===1000 || order.order_status===1200 || order.order_status===11000 || order.order_status===10000" class="right closed normal" href="javascript:void(0)" @click.stop="biginGuy(order.order_product[0].id)">再次购买</a>
       <a v-if="order.order_status===301" class="right Conduct bgYellow" href="javascript:void(0)" @click.stop="orderCompleted">服务完成</a>
       
       <a v-if="order.order_status===11000 || (timeServer<=0 && order.order_status===0)" class="right cancel normal" href="javascript:void(0)" @click.stop="orderDelete">删除订单</a>
@@ -157,6 +160,7 @@ export default {
       },
       // serviceStart: 0,
       ordersn: '',
+      orderid:null,
       order: {},
       timeDown: '00:00',
       timeServer: 0,
@@ -177,7 +181,7 @@ export default {
         1300:{title: '服务结束', desc: '欢迎进行再次购买'},
         10000: {title: '退款中', desc: '退款将于3个工作日返回原账户'},
         11000: {title: '订单已取消', desc: '用户取消订单成功'},
-        // 12000: {title: '交易关闭', desc: '未付款，订单已取消'}
+        12000: {title: '交易关闭', desc: '未付款，订单已取消'}
       },
       isShowFirstOrder: false,
       jfk: {}
@@ -188,11 +192,39 @@ export default {
   },
   created () {
     this.ordersn = this.$route.params.ordersn
+    this.orderid = this.$route.params.orderid
     this.getOrder()
   },
   methods: {
+      biginGuy(pro_id){
+        let _this=this
+        if(pro_id===1000167 || pro_id===1000370){
+
+            _this.$router.push({
+                name:'chooseorder',
+                params:{
+                    id:pro_id
+                }
+            })
+        }else if(pro_id===1000069||pro_id===1000663||pro_id===1001104){
+            _this.$router.push({
+                name:'qcsgoshoporder',
+                params:{
+                    id:pro_id
+                }
+            })
+        }
+        else{
+            _this.$router.push({
+                name:"order",
+                params:{
+                    id:pro_id
+                }
+            })
+        }
+    },
     async getOrder(){
-      let res = await getOrder({order_sn:this.ordersn})
+      let res = await getOrder({order_sn:this.ordersn,order_id:this.orderid})
       if(res.status == 'ok'){
         this.order = res.data[0];
         if(this.order.order_status === 0){
@@ -283,20 +315,21 @@ export default {
       alert('复制异常，刷新重试')
     },
     setTitle_desc(){
+        //0--等待付款(30分钟内完成)
       if(this.order.order_status === 0 && this.timeServer <= 0){
         this.order.order_status = 11000
         this.title_desc = this.orderStatus[12000]
         return
       }
-
+        //11000--订单已取消(用户订单取消成功)
       if(this.order.order_status===11000 && this.order.three_paid>0){
         this.title_desc = this.orderStatus[12000]
         return
       }
-
+        //1000--等待评价 1200--服务完成
       if((this.order.order_status===1000 || this.order.order_status===1200) && this.order.comments_num === 2)
       {
-        this.title_desc = this.orderStatus[1300]
+        this.title_desc = this.orderStatus[1300]//服务结束
         return
       }
 
@@ -387,6 +420,9 @@ export default {
           @include sc(1.8rem,#000);
           text-align: center;
           line-height: 4.4rem;
+          button{
+              
+          }
           .left:first-child{
             color: #999;
             border-right: .05rem solid #999;
@@ -666,14 +702,25 @@ export default {
     @include wh(100%,5rem);
     @include bgColor(#fff);
     z-index: 2;
+    display: flex;
+    justify-content: space-between;
     // line-height: 5rem;
+    align-items: center;
     a{
-      margin-right: 1.5rem;
-      @include wh(10rem,3.4rem);
-      margin-top: .8rem;
+    //   margin-right: 1.5rem;
+      @include wh(30%,3.4rem);
+    //   margin-top: .8rem;
       text-align: center;
       line-height: 3.4rem;
       
+    }
+    a.back-btn{
+        // display: inline-block;
+        margin-right: 0;
+        background-color: #999;
+        border: 1px solid #666;
+        color: #fff;
+        border-radius: .4rem;
     }
     a.bgYellow{
       border-radius: .4rem;

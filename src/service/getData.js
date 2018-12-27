@@ -233,3 +233,18 @@ export const getjson = () => fetch(`/mon/mon_config_product`, {}, 'POST')
 
 export const authToken = (data) => fetch(`/mon/mon_token_login`, data, 'POST')
 export const authCRMToken = (data) => fetch(`/mon/mon_crm_token`, data, 'POST')
+
+//屈臣氏激活优惠吗   
+export const qcsCouponSend = (data) => fetch(`/wechat_qcs/qcs_coupon_send`, data, 'POST')
+//屈臣氏工会激活优惠码
+export const qcsGhCouponSend = (data) => fetch(`/wechat_qcs/qcs_gh_coupon_send`, data, 'POST')
+//屈臣氏首页产品列表
+export const qcsProList= (data) => fetch(`/wechat_qcs/qcs_product_index_list`, data, 'POST')
+//根据地区选择门店地址
+export const qcsAddressList = (data) => fetch(`/wechat_qcs/qcs_address_list_return`, data, 'POST')
+//
+export const getArea = (data) => fetch(`/mon/mon_get_area`, data, 'POST')
+//
+export const getCity = (data) => fetch(`/mon/mon_get_city`, data, 'POST')
+
+export const getProv = (data) => fetch(`/mon/mon_get_province`, data, 'POST')

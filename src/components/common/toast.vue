@@ -21,7 +21,7 @@ export default {
       $toast.fadeIn(100)
       setTimeout(function () {
           $toast.fadeOut(100)
-      }, 2000)
+      }, 20000)
     }
   },
   created () {

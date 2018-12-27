@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer" :style="footstyle">
     <div class="weui-tab">
       <div class="weui-tab__panel">
 
@@ -37,7 +37,9 @@
 <script>
 import Vue from 'vue';
 import { getNavIcon } from '@/service/getData';
+import store from '../../vuex/store'
 export default {
+    store,
   name: 'footer',
   data () {
     return {
@@ -81,7 +83,12 @@ export default {
   watch: {
     selected: function (val, oldVal) {
     }
-  }
+  },
+    computed:{
+        footstyle(){
+            return this.$store.state.footstate;
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>

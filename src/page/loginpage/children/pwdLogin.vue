@@ -27,7 +27,8 @@ export default {
       pwd: '',
       iconShow: '',
       alertShow: false,
-      alertText: ''
+      alertText: '',
+      baseUrl:''
     }
   },
   props:['channel'],
@@ -36,6 +37,11 @@ export default {
   },
   created () {
     this.$on('pwdLogin',this.pwdLogin)
+    this.baseUrl=this.$route.query.url
+    console.log(this.baseUrl)
+  },
+  mounted(){
+      console.log(this.$route.query.url)
   },
   methods: {
     async pwdLogin (){
@@ -46,7 +52,10 @@ export default {
         setStore(keyConf.userMoile, this.mobile)
         if(this.$route.query.url){
           this.$router.push(this.$route.query.url)
+        }else if(this.$route.params.url){
+            this.$router.push(this.$route.params.url)
         }else{
+            this.$router.go(-1)
           this.$router.push('/usercenter')
         }
       }else{

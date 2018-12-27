@@ -1,10 +1,12 @@
 <template>
   <div class="look_item clear" v-if="recommendList && recommendList.price">
-    <a :href="`/detail/${recommendList.id}${from_class}`">
+    <!-- <a :href="`/detail/${recommendList.id}${from_class}`"> -->
+    <a  @click="todetail(recommendList.id)">
       <div class="look_part">
         <div class="item_img">
           <div class="img_box" :style="{backgroundImage : 'url('+product_thumb+')'}">
-            <a :href="`/detail/${recommendList.id}${from_class}`">
+            <!-- <a :href="`/detail/${recommendList.id}${from_class}`" @click="todetail()"> -->
+            <a  @click="todetail(recommendList.id)">
               <img src="../../../../assets/image/icon/detail/square_default_bg.jpg">
             </a>
           </div>
@@ -88,6 +90,21 @@ export default {
   },
   methods: {
     /*产品缩略图的所属类（推荐，化妆，美睫，培训等）*/
+    todetail(productId){
+        let _this=this
+        // if(_this.recommendList.id==1000370 || _this.recommendList.id==1000069 ||_this.recommendList.id==1000167 ){
+        if(productId==1000370 || productId==1000069 ||productId==1000167 || productId==1001104){
+            // _this.$router.push("/choosedetail/"+productId)
+            _this.$router.push({
+                path:'/choosedetail/'+productId,
+                query:{
+                    id:productId
+                }
+            })
+        }else{
+            _this.$router.push("/detail/"+productId+'?id='+productId)
+        }
+    },
     fromClass() {
       var url = window.location.search; //获取url中"?"符后的字串
       var path = window.location.pathname;

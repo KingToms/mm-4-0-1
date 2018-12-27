@@ -122,7 +122,21 @@ export default {
       chooseBg: -1,
       business_start: "",
       business_end: "",
-      busy_time: {} // 记录选中日期的忙时
+      busy_time: {},// 记录选中日期的忙时
+      product_info: {
+        product_id: '', //产品id
+        service_form: '', // 服务方式
+        name: '', // 商品名称
+        thumb: '', // 商品缩略图
+        seo_title: '', // 服务商家名字
+        score: '', // 分数
+        price: '', //价格
+        market_price: '', // 市场价格
+        coupon: {
+            useCoupon: [], //可用优惠券
+            unUseCoupon: [] // 不可用优惠券
+        }
+    },
     };
   },
   props: {
@@ -154,6 +168,8 @@ export default {
     ...mapState(["confirmOrder"])
   },
   created() {
+    this.confirmOrder.date=null;
+    this.confirmOrder.time=null;
     this.InitTime();
     this.startDate = new Date();
     this.timeNow = this.startDate;

@@ -116,8 +116,8 @@
     <div class="search-result" v-if="hasResult === 1 && !showHistory">
       <div class="list">
           <ul class="page-loadmore-list">
-            <li v-for="item in searchList" :key="item.id">
-              <router-link :to="{name: 'detail', params:{id:item.id}}" class="clear">
+            <li v-for="item in searchList" :key="item.id" @click="todetail(item.id)">
+              <!-- <router-link :to="{name: 'detail', params:{id:item.id}}" class="clear"> -->
               <div class="img left">
                 <img :src="item.thumb" alt="">
               </div>
@@ -140,7 +140,7 @@
                   到店再付: {{item.shop_price ? item.shop_price : ""}}元
                 </p>
               </div>
-              </router-link>
+              <!-- </router-link> -->
             </li>
           </ul>
         <!-- </mt-loadmore>  -->
@@ -228,6 +228,18 @@ export default {
     ...mapMutations([
       'CLEAR_SEARCHHIS','HAS_HISTORY','GET_SEARCHHIS','SET_CURRENTSEARCH','SET_SEARCHHIS'
     ]),
+    todetail(productId){
+        let _this=this
+        // if(_this.recommendList.id==1000370 || _this.recommendList.id==1000069 ||_this.recommendList.id==1000167 ){
+        if(productId==1000370 || productId==1000069 ||productId==1000167 ){
+            _this.$router.push("/choosedetail/"+productId)
+        }else{
+            _this.$router.push("/detail/"+productId)
+        }
+    },
+    detail(){
+        
+    },
     btnSearchStart (){
       this.SET_CURRENTSEARCH(this.searchText)
       this.$router.push('/search/start')
@@ -850,7 +862,7 @@ export default {
           }
         }
         .info{
-          width: 66%;
+          width: 60%;
           height: 12.3rem;
           padding-top: .6rem;
           letter-spacing: 1px;

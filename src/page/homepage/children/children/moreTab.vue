@@ -6,7 +6,8 @@
     <router-link :to="to" class="more-img"></router-link>
   </div>
   <div class="items">
-    <div class="item" v-for="(item,index) in list" :key="index" @click="$router.push(`/detail/${item.product.id}`)">
+    <!-- <div class="item" v-for="(item,index) in list" :key="index" @click="$router.push(`/detail/${item.product.id}`)"> -->
+    <div class="item" v-for="(item,index) in list" :key="index" @click="todetail(index)">
       <div class="item-img" :style="{backgroundImage:`url(${item.image})`}">
       <!--<div class="item-img" :style="{backgroundImage:`url(${item.product && item.product.thumb})`}">-->
         <div class="collect">
@@ -23,10 +24,41 @@
 </div>
 </template>
 <script>
+import { getHomeRecommend } from "@/service/getData";
 export default {
   name: "moreTab",
   data() {
-    return {};
+    return {
+        list:[]
+    };
+  },
+  created(){
+      this.getData()
+  },
+  mounted(){
+
+    },
+  methods:{
+      todetail(index){
+          let _this=this
+          if(_this.list[index].product.id==1000167 || _this.list[index].product.id==1000370 || _this.list[index].product.id==1000069 || _this.list[index].product.id==1001099){
+            //   _this.$router.push(`/choosedetail/${_this.list[index].product.id}`)
+            _this.$router.push({
+                path:`/choosedetail/${_this.list[index].product.id}`,
+                query:{
+                    id:_this.list[index].product.id
+                }
+            })
+          }else{
+              _this.$router.push(`/detail/${_this.list[index].product.id}`)
+          }
+      },
+      async getData(){
+          let res = await getHomeRecommend();
+          if(res.status=="ok"){
+              this.list=res.type_1.data
+          }
+      }
   },
   props: {
     title: {

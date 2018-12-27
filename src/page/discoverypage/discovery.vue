@@ -9,23 +9,23 @@
     </div>
     <!--顶部轮播-->
     <div class="swipe-wrapper" v-show="topCarousel">
-      <!-- <mt-swipe :show-indicators="false">
-        <mt-swipe-item v-for="(item,index) in topCarousel" :key="index">
-          <a class="imgshow" :href="item.link">
-            <img :src="item.img_url" alt="大家有话说">
-          </a>
-        </mt-swipe-item>
-      </mt-swipe> -->
-      <div>
-        <a class="imgshow" :href="topCarousel[0].link">
-            <img :src="topCarousel[0].img_url" alt="大家有话说">
-          </a>
-      </div>
-      <div>
-        <a class="imgshow" :href="topCarousel[1].link">
-            <img :src="topCarousel[1].img_url" alt="大家有话说">
-          </a>
-      </div>
+        <mt-swipe :show-indicators="false">
+            <mt-swipe-item v-for="(item,index) in topCarousel" :key="index">
+            <a class="imgshow" :href="item.link">
+                <img :src="item.img_url" alt="大家有话说">
+            </a>
+            </mt-swipe-item>
+        </mt-swipe>
+        <!-- <div>
+            <a class="imgshow" :href="topCarousel[0].link">
+                <img :src="topCarousel[0].img_url" alt="大家有话说"> 
+            </a>
+        </div> -->
+        <!-- <div>
+            <a class="imgshow" :href="topCarousel[1].link">
+                <img :src="topCarousel[1].img_url" alt="大家有话说">
+            </a>
+        </div> -->
     </div>
     <div class="content">
       <div class="content-title">她们都在晒</div>
@@ -66,6 +66,7 @@ export default {
     this.showHeaderFooter();
     this.getFoundList();
     this.scroll();
+    console.log(this.topCarousel)
   },
   methods: {
     /*获取发现页数据*/
@@ -77,7 +78,6 @@ export default {
         this.count = res.count;
         this.topCarousel = res.ad;
         this.like_list = res.user_dz ? res.user_dz : '';
-
         this.flag = true;
         if(this.count === this.discovery_list.length){
           this.flag = false;
@@ -161,7 +161,7 @@ export default {
     a.imgshow {
       display: block;
       width: 100%;
-      height: 10rem;
+    //   height: 10rem;
     }
     img {
       width: 100%;

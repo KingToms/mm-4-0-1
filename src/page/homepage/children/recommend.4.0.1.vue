@@ -117,7 +117,7 @@
     <div class="footer-tip">
       <p>——&nbsp;&nbsp; 人家是有底线的 &nbsp;&nbsp; ——</p>
     <div v-if="isShowAd" class="window-box" style="text-align:center;">
-        <img class="img-qr" src="http://shop.lanseeyun.com/Public/Home/images/qr/mptest.png" alt="">
+        <img class="img-qr" src="../../../../static/image/link_program.png" alt="">
         <img @click="isShowAd=false" class="back" src="../../../../static/icon/wrong.png" alt="">
     </div> 
     <div @click="isShowAd=false" class="mask-box" v-if="isShowAd"></div>
